@@ -21,6 +21,7 @@
 <script>
 import Chart from "chart.js/auto";
 import { shallowRef } from "vue";
+import axios from "axios";
 
 export default {
   data() {
@@ -39,7 +40,7 @@ export default {
             "rgba(153, 102, 255, 0.2)",
             "rgba(201, 203, 207, 0.2)",
           ],
-          data: [2, 8, 10, 7, 6, 12, 15],
+          data: [],
         },
       ],
     };
@@ -62,15 +63,21 @@ export default {
     );
   },
   methods: {
-    setInitialDateInputs() {
+    async setInitialDateInputs() {
       var currentDate = new Date();
-      document.getElementById("endDate").value = currentDate
-        .toISOString()
-        .split("T")[0];
+      let endDate = document.getElementById("endDate");
+      endDate.value = currentDate.toISOString().split("T")[0];
       currentDate.setDate(currentDate.getDate() - 6);
-      document.getElementById("startDate").value = currentDate
-        .toISOString()
-        .split("T")[0];
+      let startDate = document.getElementById("startDate");
+      startDate.value = currentDate.toISOString().split("T")[0];
+      let response = await axios.get(
+        import.meta.env.VITE_API_URL +
+          "/ca/?start=" +
+          startDate.value +
+          "&end=" +
+          endDate.value
+      );
+      this.updateLabels(response.data);
     },
     getInitialDatesLabels() {
       var currentDate = new Date();
@@ -81,72 +88,39 @@ export default {
         this.label.unshift(currentDate.toISOString().split("T")[0]);
       }
     },
-    onStartDateChange(e) {
+    async onStartDateChange(e) {
       let newStartDate = new Date(e.target.value);
-      let initialStartDate = new Date(this.label[0]);
-      if (newStartDate.getTime() == initialStartDate.getTime()) {
-        return;
-      }
-      if (newStartDate.getTime() < initialStartDate.getTime()) {
-        let dateReached = false;
-        let newLabel = [...this.label];
-        while (dateReached === false) {
-          let newDate = new Date(newLabel[0]);
-          newDate.setDate(newDate.getDate() - 1);
-          newLabel.unshift(newDate.toISOString().split("T")[0]);
-
-          if (newDate.getTime() == newStartDate.getTime()) {
-            dateReached = true;
-          }
-        }
-        this.label = newLabel;
-      } else {
-        let dateReached = false;
-        let newLabel = [...this.label];
-        while (dateReached === false) {
-          newLabel.shift();
-          let newDate = new Date(newLabel[0]);
-          if (newDate.getTime() == newStartDate.getTime()) {
-            dateReached = true;
-          }
-          this.label = newLabel;
-        }
-      }
-      this.graph.config.data.labels = this.label;
-      this.graph.update();
+      let endDate = document.getElementById("endDate").value;
+      let response = await axios.get(
+        import.meta.env.VITE_API_URL +
+          "/ca/?start=" +
+          e.target.value +
+          "&end=" +
+          endDate
+      );
+      this.updateLabels(response.data);
     },
-    onEndDateChange(e) {
+    async onEndDateChange(e) {
       let newEndDate = new Date(e.target.value);
-      let initialEndDate = new Date(this.label[this.label.length - 1]);
-      if (newEndDate.getTime() == initialEndDate.getTime()) {
-        return;
-      }
-      if (newEndDate.getTime() > initialEndDate.getTime()) {
-        let dateReached = false;
-        let newLabel = [...this.label];
-        while (dateReached === false) {
-          let newDate = new Date(newLabel[newLabel.length - 1]);
-          newDate.setDate(newDate.getDate() + 1);
-          newLabel.push(newDate.toISOString().split("T")[0]);
-
-          if (newDate.getTime() == newEndDate.getTime()) {
-            dateReached = true;
-          }
-        }
-        this.label = newLabel;
-      } else {
-        let dateReached = false;
-        let newLabel = [...this.label];
-        while (dateReached === false) {
-          newLabel.pop();
-          let newDate = new Date(newLabel[newLabel.length - 1]);
-          if (newDate.getTime() == newEndDate.getTime()) {
-            dateReached = true;
-          }
-          this.label = newLabel;
-        }
-      }
-      this.graph.config.data.labels = this.label;
+      let startDate = document.getElementById("startDate").value;
+      let response = await axios.get(
+        import.meta.env.VITE_API_URL +
+          "/ca/?start=" +
+          startDate +
+          "&end=" +
+          e.target.value
+      );
+      this.updateLabels(response.data);
+    },
+    updateLabels(cas) {
+      this.labels = [];
+      this.datasets[0].data = [];
+      cas.forEach((date) => {
+        this.labels.push(date.date);
+        this.datasets[0].data.push(date.ca);
+      });
+      this.graph.config.data.labels = this.labels;
+      this.graph.config.data.datasets = this.datasets;
       this.graph.update();
     },
   },
