@@ -46,6 +46,9 @@
       }"
       />
     </div>
+    <div v-if="produits">
+      <Pagination :page="page" :limit="limit" :total="total" :last="last" />
+    </div>
     <div class="flex justify-end my-2">
       <Button label="Envoyer" @click="submit" />
     </div>
@@ -56,22 +59,44 @@
 import Search from '@/components/inputs/Search.vue';
 import Button from '@/components/inputs/Button.vue';
 import Table from '@/components/Table.vue';
+import Pagination from '@/components/Pagination.vue';
 import axios from 'axios';
 import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useTableStore } from '@/stores/tableComponent';
+const tableStore = useTableStore();
+const route = useRoute();
+watch(() => route.query.page, () => {
+  getProduits();
+});
+const router = useRouter();
 
 const produits = ref(null);
 const categories = ref(null);
-const tableStore = useTableStore();
+const category = ref('');
+const page = ref(1);
+const limit = ref(2);
+const total = ref(0);
+const last = ref(0);
 
 getProduits();
 getCategories();
 
-function getProduits(category = '') {
-  const url = category === '' ? 'produits/' : 'produits/' + category + '/';
+function getProduits(cat = '') {
+  if (cat !== '') {
+    category.value = cat;
+  }
+  let url = category.value === '' ? 'produits/' : 'produits/' + category.value + '/';
+  if (route.query.page) {
+    url += '?page=' + route.query.page;
+  }
   axios.get(import.meta.env.VITE_API_URL + url)
     .then(response => {
-      produits.value = response.data;
+      produits.value = response.data.data;
+      total.value = parseInt(response.data.total);
+      limit.value = parseInt(response.data.limit);
+      page.value = parseInt(response.data.page);
+      last.value = parseInt(response.data.last);
     })
     .catch(error => {
       console.log(error);
