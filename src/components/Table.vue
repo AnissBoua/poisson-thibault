@@ -44,8 +44,7 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-import { ref, defineProps, computed, defineAsyncComponent, watch } from 'vue';
+import { ref, defineProps, defineAsyncComponent, watch } from 'vue';
 import { useTableStore } from '@/stores/tableComponent';
 const props = defineProps([
     'columns', 
@@ -57,7 +56,10 @@ const columns = ref({
     keys: null,
     values: null
 })
-const data = props.data
+const data = ref(props.data)
+watch(() => props.data, (newValue) => {
+    data.value = newValue
+})
 const checkbox = props.checkbox
 let dynamicComponents = {}
 const tableStore = useTableStore()
