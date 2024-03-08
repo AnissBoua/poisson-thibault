@@ -7,7 +7,7 @@
         <div class="flex">
             <span class="text-center font-bold my-20 mx-auto">        
                 <a href="https://egoistdeveloper.github.io/twcss-to-sass-playground/" target="_blank" class="text-blue-600">
-                    Convetert to SASS
+                    Connexion
                 </a>
             </span>
         </div>
@@ -73,7 +73,10 @@
 
 <script>
 import axios from 'axios';
+import { accountService } from "@/_services/account_services"
+
 export default {
+    name : 'Login',
     data() {
     return {
       email: '',
@@ -82,11 +85,30 @@ export default {
   },
   methods: {
     login() {
-       
-      // Ici vous pouvez gérer la soumission du formulaire, par exemple envoyer les données au serveur
-      console.log('Email:', this.email);
-      console.log('Password:', this.password);
-    }
+
+            accountService.login(this.user)
+                .then(res => {
+                    accountService.saveToken(res.data.access_token)
+                    this.$router.push('/tableau')
+                })
+                .catch(err => console.log(err))
+//                    fetch('http://127.0.0.1:8000', {
+//                 headers: {
+//                     'Accept': 'application/json',
+//                     'Content-Type': 'application/json'
+//                 },
+//                 method: 'POST',
+//                 body: JSON.stringify(this.user)
+//             })
+//                 .then(blob => blob.json())
+//                 .then(data => {
+//                     console.log(data)
+//                     localStorage.setItem('token', data.access_token)
+//                     this.$router.push('/admin/dashboard')
+//                 })
+//                 .catch(err => console.log(err))
+//       // Ici vous pouvez gérer la soumission du formulaire, par exemple envoyer les données au serveur
+        }
   }
 };
 </script>
