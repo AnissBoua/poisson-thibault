@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Auth from '@/views/auth.vue'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +21,13 @@ const router = createRouter({
       path: '/produit/:id/edit',
       name: 'produit-edit',
       component: () => import('../views/forms/Produit.vue'),
+    },
+    {
+      path: '/auth',
+      name : 'auth',
+      component: Auth,
     }
+
   ]
 })
 
