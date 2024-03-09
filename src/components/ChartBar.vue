@@ -1,5 +1,19 @@
 <template>
   <div>
+    <select
+      v-model="category"
+      class="text-black border rounded"
+      @change="onCategoryChange"
+    >
+      <option value="" selected>Sélectionnez une catégorie</option>
+      <option
+        v-for="(option, index) in options"
+        :key="index"
+        :value="option.nom"
+      >
+        {{ option.nom }}
+      </option>
+    </select>
     <canvas id="graph" aria-label="chart" height="350"></canvas>
     <input
       type="date"
@@ -24,6 +38,13 @@ import { shallowRef } from "vue";
 import axios from "axios";
 
 export default {
+  async setup() {
+    const response = await axios.get(
+      import.meta.env.VITE_API_URL + "/categories/"
+    );
+    let options = response.data;
+    return { options };
+  },
   data() {
     return {
       graph: null,
@@ -43,6 +64,7 @@ export default {
           data: [],
         },
       ],
+      category: "",
     };
   },
   mounted() {
@@ -57,6 +79,11 @@ export default {
           datasets: this.datasets,
         },
         options: {
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
           responsive: true,
         },
       })
@@ -91,23 +118,53 @@ export default {
     async onStartDateChange(e) {
       let newStartDate = new Date(e.target.value);
       let endDate = document.getElementById("endDate").value;
-      let response = await axios.get(
-        import.meta.env.VITE_API_URL +
-          "/ca/?start=" +
-          e.target.value +
-          "&end=" +
-          endDate
-      );
+      let url =
+        this.category != ""
+          ? import.meta.env.VITE_API_URL +
+            "/ca/?start=" +
+            e.target.value +
+            "&end=" +
+            endDate +
+            "&category=" +
+            this.category
+          : import.meta.env.VITE_API_URL +
+            "/ca/?start=" +
+            e.target.value +
+            "&end=" +
+            endDate;
+      let response = await axios.get(url);
       this.updateLabels(response.data);
     },
     async onEndDateChange(e) {
       let newEndDate = new Date(e.target.value);
       let startDate = document.getElementById("startDate").value;
+      let url =
+        this.category != ""
+          ? import.meta.env.VITE_API_URL +
+            "/ca/?start=" +
+            startDate +
+            "&end=" +
+            e.target.value +
+            "&category=" +
+            this.category
+          : import.meta.env.VITE_API_URL +
+            "/ca/?start=" +
+            startDate +
+            "&end=" +
+            e.target.value;
+      let response = await axios.get(url);
+      this.updateLabels(response.data);
+    },
+    async onCategoryChange(e) {
+      let startDate = document.getElementById("startDate").value;
+      let endDate = document.getElementById("endDate").value;
       let response = await axios.get(
         import.meta.env.VITE_API_URL +
           "/ca/?start=" +
           startDate +
           "&end=" +
+          endDate +
+          "&category=" +
           e.target.value
       );
       this.updateLabels(response.data);
