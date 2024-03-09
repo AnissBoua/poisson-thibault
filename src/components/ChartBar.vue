@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p class="text-black text-center">
+      Chiffre d'affaire sur la période : <strong>{{ periodeCa }}€</strong>
+    </p>
     <select
       v-model="category"
       class="text-black border rounded"
@@ -65,6 +68,7 @@ export default {
         },
       ],
       category: "",
+      periodeCa: 0,
     };
   },
   mounted() {
@@ -104,6 +108,7 @@ export default {
           "&end=" +
           endDate.value
       );
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     getInitialDatesLabels() {
@@ -133,6 +138,7 @@ export default {
             "&end=" +
             endDate;
       let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onEndDateChange(e) {
@@ -153,6 +159,7 @@ export default {
             "&end=" +
             e.target.value;
       let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onCategoryChange(e) {
@@ -167,6 +174,7 @@ export default {
           "&category=" +
           e.target.value
       );
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     updateLabels(cas) {
@@ -179,6 +187,13 @@ export default {
       this.graph.config.data.labels = this.labels;
       this.graph.config.data.datasets = this.datasets;
       this.graph.update();
+    },
+    updatePeriodeCa(cas) {
+      let periodeCa = 0;
+      cas.forEach((date) => {
+        periodeCa += date.ca;
+      });
+      this.periodeCa = periodeCa;
     },
   },
 };
