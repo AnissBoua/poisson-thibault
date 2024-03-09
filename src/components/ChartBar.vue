@@ -15,20 +15,25 @@
       </option>
     </select>
     <canvas id="graph" aria-label="chart" height="350"></canvas>
-    <input
-      type="date"
-      class="mx-1 text-black border rounded"
-      name=""
-      id="startDate"
-      @change="onStartDateChange"
-    />
-    <input
-      type="date"
-      class="text-black border rounded"
-      name=""
-      id="endDate"
-      @change="onEndDateChange"
-    />
+    <div class="flex align-items-center gap-2">
+      <div class="flex align-items-center">
+        <input
+          type="date"
+          class="mx-1 text-black border rounded"
+          name=""
+          id="startDate"
+          @change="onStartDateChange"
+        />
+        <input
+          type="date"
+          class="text-black border rounded"
+          name=""
+          id="endDate"
+          @change="onEndDateChange"
+        />
+      </div>
+      <SelectAsync />
+    </div>
   </div>
 </template>
 
@@ -36,8 +41,12 @@
 import Chart from "chart.js/auto";
 import { shallowRef } from "vue";
 import axios from "axios";
+import SelectAsync from "@/components/SelectAsync.vue";
 
 export default {
+  components: {
+    SelectAsync,
+  },
   async setup() {
     const response = await axios.get(
       import.meta.env.VITE_API_URL + "/categories/"
