@@ -1,19 +1,33 @@
 <template>
   <div>
-    <select
-      v-model="category"
-      class="text-black border rounded"
-      @change="onCategoryChange"
-    >
-      <option value="" selected>Sélectionnez une catégorie</option>
-      <option
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option.nom"
+    <p class="text-black text-center">
+      Chiffre d'affaire sur la période : <strong>{{ periodeCa }}€</strong>
+    </p>
+    <div class="flex align-items-center gap-4">
+      <select
+        v-model="category"
+        class="text-black border rounded"
+        @change="onCategoryChange"
       >
-        {{ option.nom }}
-      </option>
-    </select>
+        <option value="" selected>Sélectionnez une catégorie</option>
+        <option
+          v-for="(option, index) in options"
+          :key="index"
+          :value="option.nom"
+        >
+          {{ option.nom }}
+        </option>
+      </select>
+      <div class="flex align-items-center">
+        <input
+          v-model="isSale"
+          type="checkbox"
+          class="mx-1"
+          @change="onSaleChange"
+        />
+        <label class="text-black" for="checkbox">Produits Soldés</label>
+      </div>
+    </div>
     <canvas id="graph" aria-label="chart" height="350"></canvas>
     <div class="flex align-items-center gap-2">
       <div class="flex align-items-center">
@@ -74,6 +88,8 @@ export default {
         },
       ],
       category: "",
+      periodeCa: 0,
+      isSale: false,
     };
   },
   mounted() {
@@ -113,6 +129,7 @@ export default {
           "&end=" +
           endDate.value
       );
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     getInitialDatesLabels() {
@@ -128,54 +145,64 @@ export default {
       let newStartDate = new Date(e.target.value);
       let endDate = document.getElementById("endDate").value;
       let url =
-        this.category != ""
-          ? import.meta.env.VITE_API_URL +
-            "/ca/?start=" +
-            e.target.value +
-            "&end=" +
-            endDate +
-            "&category=" +
-            this.category
-          : import.meta.env.VITE_API_URL +
-            "/ca/?start=" +
-            e.target.value +
-            "&end=" +
-            endDate;
+        import.meta.env.VITE_API_URL +
+        "/ca/?start=" +
+        e.target.value +
+        "&end=" +
+        endDate;
+      if (this.category != "") url += "&category=" + this.category;
+      if (this.isSale) url += "&sale=true";
+
       let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onEndDateChange(e) {
       let newEndDate = new Date(e.target.value);
       let startDate = document.getElementById("startDate").value;
       let url =
-        this.category != ""
-          ? import.meta.env.VITE_API_URL +
-            "/ca/?start=" +
-            startDate +
-            "&end=" +
-            e.target.value +
-            "&category=" +
-            this.category
-          : import.meta.env.VITE_API_URL +
-            "/ca/?start=" +
-            startDate +
-            "&end=" +
-            e.target.value;
+        import.meta.env.VITE_API_URL +
+        "/ca/?start=" +
+        startDate +
+        "&end=" +
+        e.target.value;
+      if (this.category != "") url += "&category=" + this.category;
+      if (this.isSale) url += "&sale=true";
       let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onCategoryChange(e) {
       let startDate = document.getElementById("startDate").value;
       let endDate = document.getElementById("endDate").value;
-      let response = await axios.get(
+      let url =
         import.meta.env.VITE_API_URL +
-          "/ca/?start=" +
-          startDate +
-          "&end=" +
-          endDate +
-          "&category=" +
-          e.target.value
-      );
+        "/ca/?start=" +
+        startDate +
+        "&end=" +
+        endDate +
+        "&category=" +
+        e.target.value;
+      if (this.isSale) url += "&sale=true";
+      let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
+      this.updateLabels(response.data);
+    },
+    async onSaleChange(e) {
+      let startDate = document.getElementById("startDate").value;
+      let endDate = document.getElementById("endDate").value;
+      let url =
+        import.meta.env.VITE_API_URL +
+        "/ca/?start=" +
+        startDate +
+        "&end=" +
+        endDate +
+        "&sale=" +
+        this.isSale;
+      if (this.category != "") url += "&category=" + this.category;
+
+      let response = await axios.get(url);
+      this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     updateLabels(cas) {
@@ -188,6 +215,13 @@ export default {
       this.graph.config.data.labels = this.labels;
       this.graph.config.data.datasets = this.datasets;
       this.graph.update();
+    },
+    updatePeriodeCa(cas) {
+      let periodeCa = 0;
+      cas.forEach((date) => {
+        periodeCa += date.ca;
+      });
+      this.periodeCa = periodeCa;
     },
   },
 };
