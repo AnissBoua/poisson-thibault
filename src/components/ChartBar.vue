@@ -13,7 +13,7 @@
         <option
           v-for="(option, index) in options"
           :key="index"
-          :value="option.nom"
+          :value="option.id"
         >
           {{ option.nom }}
         </option>
@@ -46,7 +46,7 @@
           @change="onEndDateChange"
         />
       </div>
-      <SelectAsync />
+      <SelectAsync @selected="onProductChange" />
     </div>
   </div>
 </template>
@@ -142,68 +142,64 @@ export default {
       }
     },
     async onStartDateChange(e) {
-      let newStartDate = new Date(e.target.value);
-      let endDate = document.getElementById("endDate").value;
-      let url =
-        import.meta.env.VITE_API_URL +
-        "/ca/?start=" +
-        e.target.value +
-        "&end=" +
-        endDate;
-      if (this.category != "") url += "&category=" + this.category;
-      if (this.isSale) url += "&sale=true";
+      let url = this.getUrl();
 
       let response = await axios.get(url);
       this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onEndDateChange(e) {
-      let newEndDate = new Date(e.target.value);
-      let startDate = document.getElementById("startDate").value;
-      let url =
-        import.meta.env.VITE_API_URL +
-        "/ca/?start=" +
-        startDate +
-        "&end=" +
-        e.target.value;
-      if (this.category != "") url += "&category=" + this.category;
-      if (this.isSale) url += "&sale=true";
+      let url = this.getUrl();
       let response = await axios.get(url);
       this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onCategoryChange(e) {
-      let startDate = document.getElementById("startDate").value;
-      let endDate = document.getElementById("endDate").value;
-      let url =
-        import.meta.env.VITE_API_URL +
-        "/ca/?start=" +
-        startDate +
-        "&end=" +
-        endDate +
-        "&category=" +
-        e.target.value;
-      if (this.isSale) url += "&sale=true";
+      let url = this.getUrl();
       let response = await axios.get(url);
       this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
     },
     async onSaleChange(e) {
-      let startDate = document.getElementById("startDate").value;
-      let endDate = document.getElementById("endDate").value;
-      let url =
-        import.meta.env.VITE_API_URL +
-        "/ca/?start=" +
-        startDate +
-        "&end=" +
-        endDate +
-        "&sale=" +
-        this.isSale;
-      if (this.category != "") url += "&category=" + this.category;
+      let url = this.getUrl();
 
       let response = await axios.get(url);
       this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
+    },
+    async onProductChange(product) {
+      this.product = product;
+      if (product == 0) {
+        let endDate = document.getElementById("endDate");
+        let startDate = document.getElementById("startDate");
+        let url =
+          import.meta.env.VITE_API_URL +
+          "/ca/?start=" +
+          startDate.value +
+          "&end=" +
+          endDate.value;
+        if (this.category != "") url += "&category=" + this.category;
+        if (this.isSale) url += "&sale=true";
+        let response = await axios.get(url);
+        this.updatePeriodeCa(response.data);
+        this.updateLabels(response.data);
+      } else {
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        let url =
+          import.meta.env.VITE_API_URL +
+          "/ca/?start=" +
+          startDate +
+          "&end=" +
+          endDate +
+          "&produit=" +
+          product;
+        if (this.category != "") url += "&category=" + this.category;
+        if (this.isSale) url += "&sale=true";
+        let response = await axios.get(url);
+        this.updatePeriodeCa(response.data);
+        this.updateLabels(response.data);
+      }
     },
     updateLabels(cas) {
       this.labels = [];
@@ -222,6 +218,20 @@ export default {
         periodeCa += date.ca;
       });
       this.periodeCa = periodeCa;
+    },
+    getUrl() {
+      let startDate = document.getElementById("startDate").value;
+      let endDate = document.getElementById("endDate").value;
+      let url =
+        import.meta.env.VITE_API_URL +
+        "/ca/?start=" +
+        startDate +
+        "&end=" +
+        endDate;
+      if (this.category != "") url += "&category=" + this.category;
+      if (this.isSale) url += "&sale=true";
+      if (this.product != "" && this.product) url += "&produit=" + this.product;
+      return url;
     },
   },
 };

@@ -8,7 +8,7 @@
         {{ selected }}
       </p>
       <div
-        v-if="open"
+        v-show="open"
         class="text-black absolute bg-white w-[15rem] rounded border"
       >
         <input
@@ -21,8 +21,8 @@
         />
         <div
           class="border"
-          :class="{ 'bg-gray-100': index % 2 === 0, 'hover:bg-blue-100': true }"
-          @click="onSelectedOption({ id: '', name: 'Sélectionnez un produit' })"
+          :class="{ 'hover:bg-blue-100': true }"
+          @click="onSelectedOption({ id: 0, name: 'Sélectionnez un produit' })"
         >
           Tous les produits
         </div>
@@ -77,7 +77,7 @@ export default {
     onSelectedOption(option) {
       this.selected = option.name;
       this.open = false;
-      this.$emit("change", option.id);
+      this.$emit("selected", option.id);
     },
   },
 };
