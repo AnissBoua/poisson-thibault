@@ -1,14 +1,25 @@
 <template>
   <div class="bg-neutral-700 rounded-md py-2 px-4">
     <p class="text-center text-neutral-200">
-      Chiffre d'affaire sur la période : <strong class="text-white">{{ periodeCa.toFixed(2) }}€</strong>
+      Chiffre d'affaire sur la période :
+      <strong class="text-white">{{ periodeCa.toFixed(2) }}€</strong>
     </p>
 
     <div class="flex items-center gap-4 my-2">
       <div class="w-1/2">
-        <select name="type" id="type" class="w-full text-sm rounded-md p-2 bg-neutral-900" v-model="category" @change="onCategoryChange">
+        <select
+          name="type"
+          id="type"
+          class="w-full text-sm rounded-md p-2 bg-neutral-900"
+          v-model="category"
+          @change="onCategoryChange"
+        >
           <option value="" selected>Sélectionnez une catégorie</option>
-          <option v-for="(option, index) in options" :key="index" :value="option.id">
+          <option
+            v-for="(option, index) in options"
+            :key="index"
+            :value="option.id"
+          >
             {{ option.nom }}
           </option>
         </select>
@@ -60,7 +71,7 @@ import Input from "./inputs/Input.vue";
 export default {
   components: {
     SelectAsync,
-    Input
+    Input,
   },
   async setup() {
     const response = await axios.get(
@@ -109,12 +120,12 @@ export default {
             y: {
               ticks: {
                 color: "rgb(212 212 212)",
-              }
+              },
             },
             x: {
               ticks: {
                 color: "rgb(212 212 212)",
-              }
+              },
             },
           },
           plugins: {
@@ -245,6 +256,13 @@ export default {
       if (this.isSale) url += "&sale=true";
       if (this.product != "" && this.product) url += "&produit=" + this.product;
       return url;
+    },
+    refreshGraph() {
+      let url = this.getUrl();
+      axios.get(url).then((response) => {
+        this.updatePeriodeCa(response.data);
+        this.updateLabels(response.data);
+      });
     },
   },
 };
