@@ -1,7 +1,13 @@
 <template>
-  <div class="bg-white w-1/4 h-[10rem] flex justify-center rounded flex-wrap">
-    <p class="text-black w-full text-center">CA ce mois :</p>
-    <h1 class="text-green-500 text-4xl font-medium">{{ mounthlyCa }}€</h1>
+  <div class="bg-neutral-700 grow flex justify-center rounded flex-wrap">
+    <p class="w-full text-center"><strong>CA mois :</strong></p>
+    <h1 
+    class="text-4xl font-medium"
+    :class="{
+      'text-red-500': mounthlyCa < 0,
+      'text-green-500': mounthlyCa >= 0,
+    }"
+    >{{ mounthlyCa.toFixed(2) }}€</h1>
   </div>
 </template>
 
