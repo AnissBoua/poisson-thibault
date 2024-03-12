@@ -1,14 +1,7 @@
 <template>
-  <div class="flex gap-4">
-    <div class="w-1/2 border rounded bg-white p-2">
-      <ChartBar />
-    </div>
-    <div class="w-1/2 flex gap-3">
-      <MounthlyCa />
-      <YearlyMarginTaxes />
-    </div>
-    <ChartCake />
-  </div>
+  <YearlyMarginTaxes />
+  <ChartBar />
+  <!-- <ChartCake /> -->
 </template>
 
 <script>
