@@ -121,6 +121,10 @@ function getCategories() {
 function submit() {
   if (tableStore.edits.length == 0) return;
   axios.patch(import.meta.env.VITE_API_URL + 'produits/updates/', tableStore.edits)
+    .then(response => {
+      tableStore.edits = [];
+      getProduits();
+    })
     .catch(error => {
       console.log(error);
     });
