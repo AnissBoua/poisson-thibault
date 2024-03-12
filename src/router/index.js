@@ -26,9 +26,9 @@ const router = createRouter({
       component: Auth,
     },
     {
-      path: "/turnover",
-      name: "turnover",
-      component: () => import("../views/Turnover.vue"),
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/Dashboard.vue"),
     },
   ],
 });
