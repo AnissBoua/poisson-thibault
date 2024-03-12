@@ -20,13 +20,23 @@
         min="1990"
         max="2099"
         :value="year"
-        @update:output="(value) => {
-          year = value
-          setTrimesterMargin()
-        }"
+        @update:output="
+          (value) => {
+            year = value;
+            setTrimesterMargin();
+          }
+        "
       />
     </div>
-    <h1 class="text-green-500 text-4xl font-medium">{{ formatCurrency(trimesterMargin) }}€</h1>
+    <h1
+      class="text-4xl font-medium"
+      :class="{
+        'text-red-500': trimesterMargin < 0,
+        'text-green-500': trimesterMargin >= 0,
+      }"
+    >
+      {{ formatCurrency(trimesterMargin) }}€
+    </h1>
   </div>
   <Alert
     v-if="openAlert"
@@ -69,7 +79,10 @@ export default {
       );
       let datas = response.data;
       this.trimesterMargin = datas.margin;
-      if (this.trimesterMargin > datas.averageMargin * 2) {
+      if (
+        this.trimesterMargin > datas.averageMargin * 2 &&
+        datas.averageMargin >= 0
+      ) {
         const defaults = {
           spread: 360,
           ticks: 100,
