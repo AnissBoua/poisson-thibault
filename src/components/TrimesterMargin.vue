@@ -26,7 +26,7 @@
         }"
       />
     </div>
-    <h1 class="text-green-500 text-4xl font-medium">{{ trimesterMargin }}€</h1>
+    <h1 class="text-green-500 text-4xl font-medium">{{ formatCurrency(trimesterMargin) }}€</h1>
   </div>
   <Alert
     v-if="openAlert"
@@ -100,6 +100,9 @@ export default {
       if (this.trimesterMargin < 0) {
         this.openAlert = true;
       }
+    },
+    formatCurrency(value) {
+      return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };
