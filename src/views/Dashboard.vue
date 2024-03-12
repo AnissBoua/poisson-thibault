@@ -2,7 +2,7 @@
   <YearlyMarginTaxes :mounthlyCa="mounthlyCa" ref="YearlyMarginTaxes" />
   <ChartBar ref="ChartBar" />
   <div class="flex my-4 gap-4">
-    <ChartCake ref="ChartCake"/>
+    <ChartCake ref="ChartCake" />
     <TrimesterMargin />
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         let endDate = document.getElementById("endDate").value;
         this.$refs.ChartBar.refreshGraph(startDate, endDate);
         this.$refs.YearlyMarginTaxes.getYearlyMarginTaxes();
-        // this.$refs.ChartCake.setRepartition(); // uncomment when ChartCake is ready :)
+        this.$refs.ChartCake.setRepartition();
       }
     });
     socket.addEventListener("close", (event) => {
