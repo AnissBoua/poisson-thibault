@@ -1,13 +1,16 @@
 <template>
-  <div class="bg-white h-fit rounded p-2">
-    <label class="text-black">Répartition sur l'année :</label>
-    <input
-      v-model="year"
-      class="text-black border rounded m-2"
+  <div class="w-1/3 bg-neutral-700 h-fit rounded p-2">
+    <Input
+      label="Répartition sur l'année :"
+      class="border rounded m-2"
       type="number"
       min="1990"
       max="2099"
-      @change="setRepartition"
+      :value="year"
+      @update:output="(value) => {
+        year = value
+        setRepartition()
+      }"
     />
     <canvas id="graphPie" aria-label="chart" height="350"></canvas>
   </div>
@@ -17,8 +20,12 @@
 import Chart from "chart.js/auto";
 import { shallowRef } from "vue";
 import axios from "axios";
+import Input from "./inputs/Input.vue";
 
 export default {
+  components: {
+    Input,
+  },
   data() {
     return {
       label: [],
@@ -61,6 +68,7 @@ export default {
   },
   methods: {
     async setRepartition() {
+      console.log("setRepartition");
       let response = await axios.get(
         import.meta.env.VITE_API_URL + "ca/?repartition=" + this.year
       );

@@ -1,7 +1,10 @@
 <template>
   <YearlyMarginTaxes :mounthlyCa="mounthlyCa" ref="YearlyMarginTaxes" />
   <ChartBar ref="ChartBar" />
-  <!-- <ChartCake ref="ChartCake"/> -->
+  <div class="flex my-4 gap-4">
+    <ChartCake ref="ChartCake"/>
+    <TrimesterMargin />
+  </div>
 </template>
 
 <script>

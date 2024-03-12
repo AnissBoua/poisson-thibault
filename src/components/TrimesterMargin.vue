@@ -1,24 +1,31 @@
 <template>
-  <div class="bg-white w-1/4 h-[10rem] flex justify-center rounded flex-wrap">
-    <p class="text-black w-full text-center">marge du :</p>
-    <select
-      v-model="trimester"
-      class="text-black border rounded"
-      @change="setTrimesterMargin"
-    >
-      <option value="1">1er trimestre</option>
-      <option value="2">2ème trimestre</option>
-      <option value="3">3ème trimestre</option>
-      <option value="4">4ème trimestre</option>
-    </select>
-    <input
-      v-model="year"
-      class="text-black border rounded m-2"
-      type="number"
-      min="1990"
-      max="2099"
-      @change="setTrimesterMargin"
-    />
+  <div class="w-full h-1/2 bg-neutral-700 rounded-md p-4">
+    <p class="text-neutral-200">Marge du :</p>
+    <div class="flex gap-4 my-2">
+      <select
+        class="w-full text-sm rounded-md p-2 bg-neutral-900"
+        name="trimestre"
+        id="trimestre"
+        v-model="trimester"
+        @change="setTrimesterMargin"
+      >
+        <option value="1">1er trimestre</option>
+        <option value="2">2ème trimestre</option>
+        <option value="3">3ème trimestre</option>
+        <option value="4">4ème trimestre</option>
+      </select>
+      <Input
+        class="border rounded m-2"
+        type="number"
+        min="1990"
+        max="2099"
+        :value="year"
+        @update:output="(value) => {
+          year = value
+          setTrimesterMargin()
+        }"
+      />
+    </div>
     <h1 class="text-green-500 text-4xl font-medium">{{ trimesterMargin }}€</h1>
   </div>
   <Alert
@@ -32,10 +39,12 @@
 <script>
 import axios from "axios";
 import Alert from "@/components/modals/Alert.vue";
+import Input from "./inputs/Input.vue";
 
 export default {
   components: {
     Alert,
+    Input,
   },
   data() {
     return {
