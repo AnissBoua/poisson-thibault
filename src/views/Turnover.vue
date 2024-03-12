@@ -1,7 +1,7 @@
 <template>
-  <YearlyMarginTaxes />
-  <ChartBar />
-  <!-- <ChartCake /> -->
+  <YearlyMarginTaxes :mounthlyCa="mounthlyCa" ref="YearlyMarginTaxes" />
+  <ChartBar ref="ChartBar" />
+  <!-- <ChartCake ref="ChartCake"/> -->
 </template>
 
 <script>
@@ -10,6 +10,7 @@ import MounthlyCa from "@/components/MounthlyCa.vue";
 import YearlyMarginTaxes from "@/components/YearlyMarginTaxes.vue";
 import ChartCake from "@/components/ChartCake.vue";
 import TrimesterMargin from "@/components/TrimesterMargin.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -18,6 +19,40 @@ export default {
     YearlyMarginTaxes,
     ChartCake,
     TrimesterMargin,
+  },
+  data() {
+    return {
+      socket: null,
+      mounthlyCa: 0,
+    };
+  },
+  mounted() {
+    const socket = new WebSocket("ws://localhost:8000/ws/ca/");
+
+    socket.addEventListener("open", (event) => {
+      console.log("WebSocket connection opened:", event);
+    });
+    socket.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "confirmation") console.log(data.content);
+      if (data.type === "new_ca") {
+        this.mounthlyCa = data.content;
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        this.$refs.ChartBar.refreshGraph(startDate, endDate);
+        this.$refs.YearlyMarginTaxes.getYearlyMarginTaxes();
+        // this.$refs.ChartCake.setRepartition(); // uncomment when ChartCake is ready :)
+      }
+    });
+    socket.addEventListener("close", (event) => {
+      console.log("WebSocket connection closed:", event);
+    });
+    this.socket = socket;
+    axios
+      .get(import.meta.env.VITE_API_URL + "ca/?mounthly_ca=true")
+      .then((response) => {
+        this.mounthlyCa = response.data;
+      });
   },
 };
 </script>
