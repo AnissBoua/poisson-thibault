@@ -63,7 +63,7 @@ export default {
   },
   async setup() {
     const response = await axios.get(
-      import.meta.env.VITE_API_URL + "/categories/"
+      import.meta.env.VITE_API_URL + "categories/"
     );
     let options = response.data;
     return { options };
@@ -124,7 +124,7 @@ export default {
       startDate.value = currentDate.toISOString().split("T")[0];
       let response = await axios.get(
         import.meta.env.VITE_API_URL +
-          "/ca/?start=" +
+          "ca/?start=" +
           startDate.value +
           "&end=" +
           endDate.value
@@ -174,7 +174,7 @@ export default {
         let startDate = document.getElementById("startDate");
         let url =
           import.meta.env.VITE_API_URL +
-          "/ca/?start=" +
+          "ca/?start=" +
           startDate.value +
           "&end=" +
           endDate.value;
@@ -188,7 +188,7 @@ export default {
         let endDate = document.getElementById("endDate").value;
         let url =
           import.meta.env.VITE_API_URL +
-          "/ca/?start=" +
+          "ca/?start=" +
           startDate +
           "&end=" +
           endDate +
@@ -224,7 +224,7 @@ export default {
       let endDate = document.getElementById("endDate").value;
       let url =
         import.meta.env.VITE_API_URL +
-        "/ca/?start=" +
+        "ca/?start=" +
         startDate +
         "&end=" +
         endDate;

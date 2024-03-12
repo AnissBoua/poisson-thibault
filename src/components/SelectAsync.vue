@@ -55,7 +55,7 @@ export default {
   methods: {
     async onSearch() {
       const response = await axios.get(
-        import.meta.env.VITE_API_URL + "/produits/?search=" + this.searchTerm
+        import.meta.env.VITE_API_URL + "produits/?search=" + this.searchTerm
       );
       let datas = response.data;
       this.options = datas
