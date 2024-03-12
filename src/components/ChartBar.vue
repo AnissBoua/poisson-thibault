@@ -1,52 +1,51 @@
 <template>
-  <div>
-    <p class="text-black text-center">
-      Chiffre d'affaire sur la période : <strong>{{ periodeCa }}€</strong>
+  <div class="bg-neutral-700 rounded-md py-2 px-4">
+    <p class="text-center text-neutral-200">
+      Chiffre d'affaire sur la période : <strong class="text-white">{{ periodeCa.toFixed(2) }}€</strong>
     </p>
-    <div class="flex align-items-center gap-4">
-      <select
-        v-model="category"
-        class="text-black border rounded"
-        @change="onCategoryChange"
-      >
-        <option value="" selected>Sélectionnez une catégorie</option>
-        <option
-          v-for="(option, index) in options"
-          :key="index"
-          :value="option.id"
-        >
-          {{ option.nom }}
-        </option>
-      </select>
-      <div class="flex align-items-center">
+
+    <div class="flex items-center gap-4 my-2">
+      <div class="w-1/2">
+        <select name="type" id="type" class="w-full text-sm rounded-md p-2 bg-neutral-900" v-model="category" @change="onCategoryChange">
+          <option value="" selected>Sélectionnez une catégorie</option>
+          <option v-for="(option, index) in options" :key="index" :value="option.id">
+            {{ option.nom }}
+          </option>
+        </select>
+      </div>
+      <div>
         <input
+          id="saleprice"
+          name="saleprice"
           v-model="isSale"
           type="checkbox"
           class="mx-1"
           @change="onSaleChange"
         />
-        <label class="text-black" for="checkbox">Produits Soldés</label>
+        <label for="saleprice">Produits Soldés</label>
       </div>
     </div>
     <canvas id="graph" aria-label="chart" height="350"></canvas>
-    <div class="flex align-items-center gap-2">
-      <div class="flex align-items-center">
+    <div class="w-full flex gap-2">
+      <div class="w-full flex gap-4 my-4">
         <input
           type="date"
-          class="mx-1 text-black border rounded"
+          class="w-1/3 bg-neutral-900 border border-neutral-700 rounded-lg outline-none focus:border-white p-2"
           name=""
           id="startDate"
           @change="onStartDateChange"
         />
         <input
           type="date"
-          class="text-black border rounded"
+          class="w-1/3 bg-neutral-900 border border-neutral-700 rounded-lg outline-none focus:border-white p-2"
           name=""
           id="endDate"
           @change="onEndDateChange"
         />
+        <div class="w-1/3">
+          <SelectAsync @selected="onProductChange" />
+        </div>
       </div>
-      <SelectAsync @selected="onProductChange" />
     </div>
   </div>
 </template>
@@ -56,10 +55,12 @@ import Chart from "chart.js/auto";
 import { shallowRef } from "vue";
 import axios from "axios";
 import SelectAsync from "@/components/SelectAsync.vue";
+import Input from "./inputs/Input.vue";
 
 export default {
   components: {
     SelectAsync,
+    Input
   },
   async setup() {
     const response = await axios.get(
@@ -76,13 +77,13 @@ export default {
         {
           label: "Chiffre d'affaire",
           backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-            "rgba(255, 205, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(201, 203, 207, 0.2)",
+            "rgba(255, 99, 132, 0.5)",
+            "rgba(255, 159, 64, 0.5)",
+            "rgba(255, 205, 86, 0.5)",
+            "rgba(75, 192, 192, 0.5)",
+            "rgba(54, 162, 235, 0.5)",
+            "rgba(153, 102, 255, 0.5)",
+            "rgba(201, 203, 207, 0.5)",
           ],
           data: [],
         },
@@ -104,6 +105,18 @@ export default {
           datasets: this.datasets,
         },
         options: {
+          scales: {
+            y: {
+              ticks: {
+                color: "rgb(212 212 212)",
+              }
+            },
+            x: {
+              ticks: {
+                color: "rgb(212 212 212)",
+              }
+            },
+          },
           plugins: {
             legend: {
               display: false,
@@ -239,7 +252,7 @@ export default {
 
 <style>
 #graph {
-  background-color: white;
+  color: white;
   width: 100%;
 }
 </style>
