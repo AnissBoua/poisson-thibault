@@ -51,11 +51,9 @@ export default {
       console.log("WebSocket connection closed:", event);
     });
     this.socket = socket;
-    axios
-      .get(import.meta.env.VITE_API_URL + "ca/?mounthly_ca=true")
-      .then((response) => {
-        this.mounthlyCa = response.data;
-      });
+    axios.get("ca/?mounthly_ca=true").then((response) => {
+      this.mounthlyCa = response.data;
+    });
   },
 };
 </script>

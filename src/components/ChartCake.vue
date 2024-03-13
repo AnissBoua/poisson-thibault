@@ -7,10 +7,12 @@
       min="1990"
       max="2099"
       :value="year"
-      @update:output="(value) => {
-        year = value
-        setRepartition()
-      }"
+      @update:output="
+        (value) => {
+          year = value;
+          setRepartition();
+        }
+      "
     />
     <canvas id="graphPie" aria-label="chart" height="350"></canvas>
   </div>
@@ -69,9 +71,7 @@ export default {
   methods: {
     async setRepartition() {
       console.log("setRepartition");
-      let response = await axios.get(
-        import.meta.env.VITE_API_URL + "ca/?repartition=" + this.year
-      );
+      let response = await axios.get("ca/?repartition=" + this.year);
       let datas = response.data;
       this.label = [];
       this.datasets[0].data = [];

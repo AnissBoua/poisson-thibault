@@ -74,9 +74,7 @@ export default {
     Input,
   },
   async setup() {
-    const response = await axios.get(
-      import.meta.env.VITE_API_URL + "categories/"
-    );
+    const response = await axios.get("categories/");
     let options = response.data;
     return { options };
   },
@@ -147,11 +145,7 @@ export default {
       let startDate = document.getElementById("startDate");
       startDate.value = currentDate.toISOString().split("T")[0];
       let response = await axios.get(
-        import.meta.env.VITE_API_URL +
-          "ca/?start=" +
-          startDate.value +
-          "&end=" +
-          endDate.value
+        "ca/?start=" + startDate.value + "&end=" + endDate.value
       );
       this.updatePeriodeCa(response.data);
       this.updateLabels(response.data);
@@ -196,12 +190,7 @@ export default {
       if (product == 0) {
         let endDate = document.getElementById("endDate");
         let startDate = document.getElementById("startDate");
-        let url =
-          import.meta.env.VITE_API_URL +
-          "ca/?start=" +
-          startDate.value +
-          "&end=" +
-          endDate.value;
+        let url = "ca/?start=" + startDate.value + "&end=" + endDate.value;
         if (this.category != "") url += "&category=" + this.category;
         if (this.isSale) url += "&sale=true";
         let response = await axios.get(url);
@@ -211,13 +200,7 @@ export default {
         let startDate = document.getElementById("startDate").value;
         let endDate = document.getElementById("endDate").value;
         let url =
-          import.meta.env.VITE_API_URL +
-          "ca/?start=" +
-          startDate +
-          "&end=" +
-          endDate +
-          "&produit=" +
-          product;
+          "ca/?start=" + startDate + "&end=" + endDate + "&produit=" + product;
         if (this.category != "") url += "&category=" + this.category;
         if (this.isSale) url += "&sale=true";
         let response = await axios.get(url);
@@ -246,12 +229,7 @@ export default {
     getUrl() {
       let startDate = document.getElementById("startDate").value;
       let endDate = document.getElementById("endDate").value;
-      let url =
-        import.meta.env.VITE_API_URL +
-        "ca/?start=" +
-        startDate +
-        "&end=" +
-        endDate;
+      let url = "ca/?start=" + startDate + "&end=" + endDate;
       if (this.category != "") url += "&category=" + this.category;
       if (this.isSale) url += "&sale=true";
       if (this.product != "" && this.product) url += "&produit=" + this.product;

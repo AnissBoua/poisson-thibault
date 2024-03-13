@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Auth from "@/views/auth.vue";
-import { authGuard } from '@/_helpers/auth-guard'
-import Register from '@/views/Register.vue'
+import Register from "@/views/Register.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,8 +27,8 @@ const router = createRouter({
       component: Auth,
     },
     {
-      path: '/register',
-      name : 'register',
+      path: "/register",
+      name: "register",
       component: Register,
     },
     {
@@ -38,6 +37,19 @@ const router = createRouter({
       component: () => import("../views/Dashboard.vue"),
     },
   ],
+});
+
+router.beforeEach(async (to, from, next) => {
+  const noLogedPath = ["/register", "/auth"];
+  if (noLogedPath.includes(to.path)) {
+    next();
+    return;
+  }
+  if (!localStorage.getItem("token")) {
+    next("/auth");
+    return;
+  }
+  next();
 });
 
 export default router;

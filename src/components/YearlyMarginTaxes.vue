@@ -104,9 +104,7 @@ export default {
   },
   methods: {
     async getYearlyMarginTaxes() {
-      let response = await axios.get(
-        import.meta.env.VITE_API_URL + "ca/?margin=" + this.year
-      );
+      let response = await axios.get("ca/?margin=" + this.year);
       let datas = response.data;
       this.yearlyMargin = datas.margin;
       if (datas.margin < 0) this.yearlyTaxes = 0;

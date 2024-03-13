@@ -1,6 +1,5 @@
 import "./assets/main.css";
-
-import Chart from "chart.js/auto";
+import "./axios-config";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 

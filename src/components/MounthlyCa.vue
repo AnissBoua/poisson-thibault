@@ -1,13 +1,15 @@
 <template>
   <div class="bg-neutral-700 grow flex justify-center rounded flex-wrap">
     <p class="w-full text-center"><strong>CA mois :</strong></p>
-    <h1 
-    class="text-4xl font-medium"
-    :class="{
-      'text-red-500': mounthlyCa < 0,
-      'text-green-500': mounthlyCa >= 0,
-    }"
-    >{{ mounthlyCa.toFixed(2) }}€</h1>
+    <h1
+      class="text-4xl font-medium"
+      :class="{
+        'text-red-500': mounthlyCa < 0,
+        'text-green-500': mounthlyCa >= 0,
+      }"
+    >
+      {{ mounthlyCa.toFixed(2) }}€
+    </h1>
   </div>
 </template>
 
@@ -36,11 +38,9 @@ export default {
       console.log("WebSocket connection closed:", event);
     });
     this.socket = socket;
-    axios
-      .get(import.meta.env.VITE_API_URL + "ca/?mounthly_ca=true")
-      .then((response) => {
-        this.mounthlyCa = response.data;
-      });
+    axios.get("ca/?mounthly_ca=true").then((response) => {
+      this.mounthlyCa = response.data;
+    });
   },
 };
 </script>

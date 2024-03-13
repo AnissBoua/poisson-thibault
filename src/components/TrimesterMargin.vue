@@ -60,23 +60,20 @@ export default {
     return {
       trimesterMargin: 0,
       trimester: 1,
-      year: 2024,
+      year: new Date().getFullYear(),
       openAlert: false,
       alertMessage: "",
       alertTitle: "",
     };
   },
   mounted() {
+    this.getTrimesterAndYear();
     this.setTrimesterMargin();
   },
   methods: {
     async setTrimesterMargin() {
       let response = await axios.get(
-        import.meta.env.VITE_API_URL +
-          "ca/?year=" +
-          this.year +
-          "&trimester=" +
-          this.trimester
+        "ca/?year=" + this.year + "&trimester=" + this.trimester
       );
       let datas = response.data;
       this.trimesterMargin = datas.margin;
@@ -125,6 +122,15 @@ export default {
     },
     formatCurrency(value) {
       return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    getTrimesterAndYear() {
+      let date = new Date();
+      let month = date.getMonth() + 1;
+      if (month <= 3) this.trimester = 1;
+      else if (month <= 6) this.trimester = 2;
+      else if (month <= 9) this.trimester = 3;
+      else this.trimester = 4;
+      this.year = date.getFullYear();
     },
   },
 };
