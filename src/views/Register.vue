@@ -26,8 +26,11 @@
             <button type="submit" class="w-full py-3 mt-10 bg-neutral-800 rounded-md font-medium uppercase hover:bg-neutral-600">Registration</button>
   
             <div class="sm:flex sm:flex-wrap mt-4 sm:mb-4 text-sm text-center">
-              <p class="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
-                Vous avez déjà un compte ? <a href="http://localhost:5173/login" class="text-green-500">Connectez vous</a>
+              <p class="flex-1 text-neutral-200 text-md mx-4 my-1 sm:my-auto">
+                Vous avez déjà un compte ?
+                <router-link to="auth">
+                  <a class="text-green-500">Connectez vous</a>
+                </router-link>
               </p>
             </div>
           </form>

@@ -15,7 +15,10 @@
 
                 <div class="sm:flex sm:flex-wrap mt-4 sm:mb-4 text-sm text-center">
                     <p class="flex-1 text-neutral-200 text-md mx-4 my-1 sm:my-auto">
-                        Vous n'avez pas de compte ? <a href="http://localhost:5173/register" class="text-green-500">Inscrivez vous</a>
+                        Vous n'avez pas de compte ? 
+                        <router-link to="register">
+                            <a class="text-green-500">Inscrivez vous</a>
+                        </router-link>
                     </p>
                 </div>
             </form>
