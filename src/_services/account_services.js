@@ -3,9 +3,13 @@ import Axios from "@/_services/caller_services"
 
 
 let login = (credentials) => {
-    return Axios.post('/auth', credentials)
+    console.log(credentials);
+    return Axios.post('/api/token/', credentials)
 }
-
+let register = (credentials)=> {
+    console.log(credentials);
+    return Axios.post('/api/register/', credentials)
+}
 let logout = () => {
     localStorage.removeItem('token')
 }
@@ -25,6 +29,7 @@ let isLogged = () => {
 
 export const accountService = {
     login,
+    register,
     logout,
     saveToken,
     getToken,

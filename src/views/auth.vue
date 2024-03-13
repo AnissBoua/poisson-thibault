@@ -25,14 +25,14 @@
 
             <form @submit.prevent="login"
              class="mt-10" method="POST">
-                <!-- Email Input -->
-                <label for="email" class="block text-xs font-semibold text-gray-600 uppercase">E-mail</label>
-                <input id="email" type="email" name="email" placeholder="e-mail address" autocomplete="email"
+                <!-- Username Input -->
+                <label for="Username" class="block text-xs font-semibold text-gray-600 uppercase">Username</label>
+                <input id="username" type="text" name="Username" placeholder="e-mail address" autocomplete="Username"
                     class="block w-full py-3 px-1 mt-2 
                     text-gray-800 appearance-none 
                     border-b-2 border-gray-100
                     focus:text-gray-500 focus:outline-none focus:border-gray-200"
-                    required v-model="email" />
+                    required v-model="username" />
 
                 <!-- Password Input -->
                 <label for="password" class="block mt-2 text-xs font-semibold text-gray-600 uppercase">Password</label>
@@ -52,18 +52,16 @@
                 </button>
 
                 <!-- Another Auth Routes -->
-                <div class="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
-                    <a href="#" class="flex-2 underline">
-                        Forgot password?
-                    </a>
-
-                    <p class="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
-                        or
-                    </p>
-        
-                    <a href="#" class="flex-2 underline">
-                        Create an Account
-                    </a>
+                <div class="sm:flex sm:flex-wrap mt-4 sm:mb-4 text-sm text-center">
+              <p class="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
+                or
+              </p>
+  
+              <a href="http://localhost:5173/register" class="button w-full py-3 mt-4 bg-gray-800 rounded-sm
+                font-medium text-white uppercase
+                focus:outline-none hover:bg-gray-700 hover:shadow-none">
+                Create account
+              </a>
                 </div>
             </form>
         </div>
@@ -79,17 +77,22 @@ export default {
     name : 'Login',
     data() {
     return {
-      email: '',
+      username: '',
       password: ''
     };
   },
   methods: {
     login() {
 
-            accountService.login(this.user)
+            accountService.login({
+                username: this.username,
+                password: this.password
+            })
+    // ici on charge les données de connexion
                 .then(res => {
-                    accountService.saveToken(res.data.access_token)
-                    this.$router.push('/tableau')
+                   let token= accountService.saveToken(res.data.access_token)
+                    this.$router.push('/')
+                    console.log(token);
                 })
                 .catch(err => console.log(err))
 //                    fetch('http://127.0.0.1:8000', {

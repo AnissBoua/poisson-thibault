@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Auth from '@/views/auth.vue'
 import { authGuard } from '@/_helpers/auth-guard'
+import Register from '@/views/Register.vue'
 
 
 
@@ -13,20 +14,25 @@ const router = createRouter({
       name: 'home',
       component: Home,
     },
-    {
-      path: '/produit/:id',
-      name: 'produit',
-      component: () => import('../views/Produit.vue'),
-    },
-    {
-      path: '/produit/:id/edit',
-      name: 'produit-edit',
-      component: () => import('../views/forms/Produit.vue'),
-    },
+    // {
+    //   path: '/produit/:id',
+    //   name: 'produit',
+    //   component: () => import('../views/Produit.vue'),
+    // },
+    // {
+    //   path: '/produit/:id/edit',
+    //   name: 'produit-edit',
+    //   component: () => import('../views/forms/Produit.vue'),
+    // },
     {
       path: '/auth',
       name : 'auth',
       component: Auth,
+    },
+    {
+      path: '/register',
+      name : 'register',
+      component: Register,
     }
 
   ]
