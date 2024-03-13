@@ -13,7 +13,7 @@
             </div>
             <div class="flex gap-4">
                 <div class="w-1/2">
-                    <Input placeholder="Pourcentage promotion" name="pourcentage" :value="stock" @update:output="(value) => stock = value"/>
+                    <Input placeholder="Stock" name="stock" :value="stock" @update:output="(value) => stock = value"/>
                 </div>
                 <div class="w-1/2">
                     <select name="type" id="type" class="w-full text-sm rounded-md p-2 bg-neutral-900" v-model="type">
