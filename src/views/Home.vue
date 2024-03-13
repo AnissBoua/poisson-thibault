@@ -1,7 +1,10 @@
 <template>
   <main>
     <div class="w-1/3 pb-4">
-      <Search url="/test"/>
+      <Search :value="route.query.search || ''" @update:search="(value) => {
+        router.push({ query: { ...route.query, search: value } });
+        debounce()
+      }"/>
     </div>
     <div class="w-1/3 pb-4">
       <select class="w-full text-sm rounded-md p-2 bg-neutral-900" @change="getProduits($event.target.value)">
@@ -88,9 +91,20 @@ function getProduits(cat = '') {
     category.value = cat;
   }
   let url = category.value === '' ? 'produits/' : 'produits/' + category.value + '/';
+
+  let params = []
   if (route.query.page) {
-    url += '?page=' + route.query.page;
+    params.push('page=' + route.query.page);
   }
+  
+  if (route.query.search) {
+    params.push('search=' + route.query.search);
+  }
+
+  if (params.length > 0) {
+    url += '?' + params.join('&');
+  }
+
   axios.get(import.meta.env.VITE_API_URL + url)
     .then(response => {
       produits.value = response.data.data;
@@ -129,5 +143,14 @@ function submit() {
     .catch(error => {
       console.log(error);
     });
+}
+
+// Pour eviter de faire des requetes a chaque fois que l'utilisateur tape dans le champ de recherche
+const timer = ref(null);
+function debounce() {
+  clearTimeout(timer.value);
+  timer.value = setTimeout(function() {
+    getProduits();
+  }, 1500);
 }
 </script>

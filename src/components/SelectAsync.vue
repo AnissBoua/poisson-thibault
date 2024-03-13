@@ -37,7 +37,7 @@ export default {
       const response = await axios.get(
         import.meta.env.VITE_API_URL + "produits/?search=" + this.searchTerm
       );
-      let datas = response.data;
+      let datas = response.data.data;
       this.options = datas
         .map((element) => ({
           id: element.id,
