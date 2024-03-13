@@ -5,7 +5,7 @@
     </div>
     <div class="w-1/3 pb-4">
       <select class="w-full text-sm rounded-md p-2 bg-neutral-900" @change="getProduits($event.target.value)">
-        <option value="">All</option>
+        <option value="all">All</option>
         <option v-for="category in categories" :key="category.id" :value="category.slug">{{ category.nom }}</option>
       </select>
     </div>
@@ -84,6 +84,7 @@ getCategories();
 
 function getProduits(cat = '') {
   if (cat !== '') {
+    if (cat === 'all') cat = '';
     category.value = cat;
   }
   let url = category.value === '' ? 'produits/' : 'produits/' + category.value + '/';
