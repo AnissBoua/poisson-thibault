@@ -28,7 +28,7 @@
         <div v-if="last - (page + 1) > 0" class="hover:bg-neutral-500 rounded-md py-1 px-2.5" @click="setPage(last)">
             <span class="cursor-pointer">{{ last }}</span>
         </div>
-        <div v-if="page < last" class="hover:bg-neutral-500 rounded-md py-1 px-2.5" @click="setPage(last)">
+        <div v-if="page < last" class="hover:bg-neutral-500 rounded-md py-1 px-2.5" @click="setPage(page + 1)">
             <span class="cursor-pointer">Next</span>
         </div>
     </div>
