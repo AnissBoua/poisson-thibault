@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute bg-neutral-900/70 w-full top-0 left-0 h-full flex items-center justify-center py-6"
+    class="fixed bg-neutral-900/70 w-full top-0 left-0 h-full flex items-center justify-center py-6"
   ></div>
   <div
     class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3"

@@ -40,7 +40,7 @@
   </div>
   <Alert
     v-if="openAlert"
-    title="Marge négative"
+    :title="alertTitle"
     :message="alertMessage"
     @close="openAlert = false"
   />
@@ -62,7 +62,8 @@ export default {
       trimester: 1,
       year: 2024,
       openAlert: false,
-      alertMessage: "Attention La marge est négative pour ce trimestre !",
+      alertMessage: "",
+      alertTitle: "",
     };
   },
   mounted() {
@@ -100,7 +101,7 @@ export default {
 
         confetti({
           ...defaults,
-          particleCount: 20,
+          particleCount: 500,
           scalar: 2,
           shapes: ["emoji"],
           shapeOptions: {
@@ -109,8 +110,16 @@ export default {
             },
           },
         });
+
+        this.alertMessage =
+          "La marge est supérieure à 200% de la moyenne des six derniers trimestres !";
+        this.alertTitle = "Marge exceptionnelle";
+        this.openAlert = true;
       }
       if (this.trimesterMargin < 0) {
+        this.alertMessage =
+          "Attention La marge est négative pour ce trimestre !";
+        this.alertTitle = "Marge négative";
         this.openAlert = true;
       }
     },
