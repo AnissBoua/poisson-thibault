@@ -135,7 +135,7 @@ function itemHasColumn(item, column) {
 
 // Recursive, pour checker les sous-colonnes
 function itemCheckSubColumn(item, columns, iteration = 0) {
-    for (const i = iteration; i < columns.length; i++) {
+    for (let i = iteration; i < columns.length; i++) {
         if (!itemHasColumn(item, columns[i])) return false;
         if (i === columns.length - 1) return item[columns[i]];
 
