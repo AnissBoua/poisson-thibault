@@ -18,8 +18,9 @@ let getToken = () => {
     return localStorage.getItem('token')
 }
 
-let saveToken = (token) => {
-    localStorage.setItem('token', token)
+let saveToken = (data) => {
+    localStorage.setItem('token', data.access)
+    localStorage.setItem('refresh_token', data.refresh)
 }
 
 let isLogged = () => {

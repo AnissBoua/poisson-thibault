@@ -50,7 +50,7 @@ export default {
             password: this.password
         })
         .then(res => {
-            let token= accountService.saveToken(res.data.access)
+            let token= accountService.saveToken(res.data)
             this.$router.push('/')
         })
         .catch(err => console.log(err))
