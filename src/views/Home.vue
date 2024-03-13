@@ -19,21 +19,24 @@
           'label': 'Product Name',
         },
         'prix': {
-          'label': 'Price',
+          'label': 'Prix',
         },
         'onSale': {
-          'label': 'On Sale',
+          'label': 'Promotion ?',
         },
         'prixSolde': {
-          'label': 'Sale Price',
+          'label': 'Prix Soldé',
         },
         'pourcentage': {
-          'label': 'Percentage sale %',
+          'label': 'Pourcentage de solde',
           'modal': 'Pourcentage'
         },
         'stock': {
           'label': 'Stock',
           'modal': 'Stock'
+        },
+        'vendu': {
+          'label': 'Vendu',
         },
         'commentaire': {
           'label': 'Comment',
